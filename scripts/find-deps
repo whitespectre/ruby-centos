@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+
+def split_string(s)
+  strings = s.split("\n")
+  strings.map do |s|
+    s.strip!.split[2]
+  end.compact.select { |f| File.exist?(f) }
+end
+
+BASEPATH=ARGV[0]
+
+if BASEPATH.nil?
+  STDERR.puts "Usage: #{File.basename(__FILE__)} BASEPATH"
+  exit 1
+end
+
+files = Dir.glob("#{BASEPATH}/**/*.so")
+files += Dir.glob("#{BASEPATH}/**/ruby")
+files.reject! { |file| File.directory?(file) }
+
+libraries = []
+
+files.each do |file|
+  libraries+= split_string(`ldd #{file}`)
+end
+
+libraries.uniq!
+
+deps = []
+
+libraries.each do |lib|
+  deps << `rpm -qf #{lib}`.chomp
+end
+
+deps.uniq!
+
+deps = deps.map { |pkg|  pkg.match(/^([^-]+(-[^0-9-]+)*)-[[:digit:]].*/)[1]}
+
+puts deps.map { |s| "--depends #{s}" }.join(" ")
