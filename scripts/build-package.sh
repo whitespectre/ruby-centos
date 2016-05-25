@@ -12,4 +12,4 @@ sudo ln -s "${BASEDIR}/bin/ruby" /usr/local/bin/ # required for find-deps to wor
 DEPS="$($(dirname $0)/find-deps /tmp/ruby )"
 
 rm -f ruby${VERSION}-*.rpm
-"${BASEDIR}/bin/fpm" -s dir -t rpm -C /tmp/ruby -n "ruby${VERSION}" --prefix /usr --version 1 ${DEPS}
+"${BASEDIR}/bin/fpm" -s dir -t rpm -C /tmp/ruby -n "ruby${VERSION}" --prefix "${BASEDIR}" --version 1 ${DEPS}
