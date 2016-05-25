@@ -3,6 +3,7 @@
 VERSION="$(cat "$(dirname $0)/../VERSION")"
 BASEDIR="/opt/ruby-${VERSION}"
 
+# We need FPM to build Ruby and don't want to have it inside the package
 sudo rm -rf /tmp/ruby
 rsync -a "${BASEDIR}/" /tmp/ruby/
 
