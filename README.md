@@ -11,6 +11,7 @@ Usage
 
 *WARNING:* First run will download 600Mb+ Vagrant box from internet.
 
+Time to build (minus download time): 8m30s
 
 Contributions
 -------------
