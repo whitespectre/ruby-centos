@@ -9,9 +9,10 @@ Vagrant.configure(2) do |config|
     vb.memory = 1024
   end
 
+  config.vm.network 'private_network', type: 'dhcp'
   # To speedup installation of packages on slow networks
   # run `vagrant plugin install vagrant-cachier` once
-  if Vagrant.has_plugin?("vagrant-cachier")
+  if Vagrant.has_plugin?('vagrant-cachier')
     config.cache.scope = :box
 
     config.cache.synced_folder_opts = {
