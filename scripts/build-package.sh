@@ -2,8 +2,7 @@
 
 VERSION="$(cat "$(dirname $0)/../VERSION")"
 BASEDIR="/opt/ruby-${VERSION}"
-RH_RELEASE="rpm -q --queryformat '%{VERSION}' redhat-release"
-[ -z "${RH_RELEASE}" ] && RH_RELEASE="rpm -q --queryformat '%{VERSION}' centos-release" ||:
+RH_RELEASE="$(rpm -q --queryformat '%{VERSION}' redhat-release)" || RH_RELEASE="$(rpm -q --queryformat '%{VERSION}' centos-release)"
 
 # We need FPM to build Ruby and don't want to have it inside the package
 sudo rm -rf /tmp/ruby
