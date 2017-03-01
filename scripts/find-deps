@@ -1,11 +1,20 @@
 #!/usr/bin/env ruby
+##
+##  Create a list of RPM dependencies for all binaries found in the brand new Ruby package
+##
 
+#
+# Extract libraries from the output of ldd command
+#
 def split_string(s)
   strings = s.split("\n")
   strings.map do |s|
     s.strip!.split[2]
   end.compact.select { |f| File.exist?(f) }
 end
+
+
+#### Main program starts here ####
 
 BASEPATH=ARGV[0]
 
@@ -14,6 +23,7 @@ if BASEPATH.nil?
   exit 1
 end
 
+# Find all binaries
 files = Dir.glob("#{BASEPATH}/**/*.so")
 files += Dir.glob("#{BASEPATH}/**/ruby")
 files.reject! { |file| File.directory?(file) }
@@ -34,6 +44,6 @@ end
 
 deps.uniq!
 
-deps = deps.map { |pkg|  pkg.match(/^([^-]+(-[^0-9-]+)*)-[[:digit:]].*/)[1]}
+deps = deps.map { |pkg|  pkg.match(/^([^-]+(-[^0-9-]+)*)-[[:digit:]].*/)[1]}   # extract package name from full RPM name -- doing that by RPM param might be better (?)
 
 puts deps.map { |s| "--depends #{s}" }.join(" ")
